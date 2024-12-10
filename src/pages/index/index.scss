@@ -1,0 +1,6 @@
+.price {
+  color: var(--price-color);
+  &::before {
+    @extend %__priceBefore;
+  }
+}
