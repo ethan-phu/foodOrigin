@@ -10,7 +10,7 @@ const Index = () => {
   }, []);
   return (
     <PageContainer className="index">
-      <Text className="text-[#acc855] text-[32px] flex-wrap">Hello world!</Text>
+      <Text className="text-[#acc855] text-[32px] flex-wrap">你好这个是我的第一个 react app</Text>
     </PageContainer>
   );
 };

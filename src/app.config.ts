@@ -3,8 +3,9 @@ export default {
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",
-    navigationBarTitleText: "WeChat",
+    navigationBarTitleText: "KnowFood",
     navigationBarTextStyle: "black",
   },
+  lazyCodeLoading: "requiredComponents",
   style: "v2",
 };

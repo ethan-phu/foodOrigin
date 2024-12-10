@@ -1,20 +1,30 @@
-import Taro from "@tarojs/taro";
+import Taro, { getSystemInfoSync, getMenuButtonBoundingClientRect } from "@tarojs/taro";
 import { Text, View } from "@tarojs/components";
-import { navigateBack, reLaunch } from "@shared/router/index";
+import router from "@shared/router";
 import IconFont from "../IconFont";
 import "./index.scss";
+
 interface IPros {
   title?: string;
   customBacKfn?: () => void;
   className?: string;
 }
 
+interface NavigationBarInfo {
+  navigationBarHeight: number;
+  navigationContentHeight: number;
+  menuButtonHeight: number;
+  navigationPaddding: number;
+  statusBarHeight: number;
+  menuButtonWidth: number;
+}
+
 // 通过获取系统信息计算导航栏高度
-const getNavigationBarInfo = () => {
+const getNavigationBarInfo = (): NavigationBarInfo => {
   // 系统信息
-  const systemInfo = Taro.getSystemInfoSync();
+  const systemInfo = getSystemInfoSync();
   // 胶囊按钮位置信息
-  const menuButtonInfo = Taro.getMenuButtonBoundingClientRect();
+  const menuButtonInfo = getMenuButtonBoundingClientRect();
   let navigationContentHeight = 40;
   // 胶囊导航栏高度
   navigationContentHeight =
@@ -28,12 +38,13 @@ const getNavigationBarInfo = () => {
     navigationContentHeight,
     menuButtonHeight: menuButtonInfo.height,
     navigationPaddding: systemInfo.windowWidth - menuButtonInfo.right,
-    statusBarHeight: systemInfo.statusBarHeight,
+    statusBarHeight: systemInfo.statusBarHeight??0,
     menuButtonWidth: menuButtonInfo.width,
   };
 };
-const NavigationHeader = (props: IPros) => {
-  const { title, customBacKfn, className } = props;
+
+const NavigationHeader: React.FC<IPros> = (props) => {
+  const { title, customBacKfn, className = '' } = props;
 
   const {
     statusBarHeight,
@@ -45,31 +56,44 @@ const NavigationHeader = (props: IPros) => {
   } = getNavigationBarInfo();
 
   const onBackClick = () => {
-    customBacKfn
-      ? customBacKfn()
-      : Taro.getCurrentPages().length > 1
-      ? navigateBack()
-      : reLaunch("pages/newHome");
+    if (customBacKfn) {
+      customBacKfn();
+    } else if (Taro.getCurrentPages().length > 1) {
+      router.navigateBack();
+    } else {
+      router.reLaunch("/pages/newHome");
+    }
   };
+
   const onBackHome = () => {
-    reLaunch("pages/newHome");
+    router.reLaunch("/pages/newHome");
+  };
+
+  const navStyle = {
+    height: `${navigationBarHeight}px`,
+    padding: `0 ${navigationPaddding}px`
+  };
+
+  const navbarStyle = {
+    height: `${navigationContentHeight}px`,
+    top: `${statusBarHeight}px`
+  };
+
+  const backIconStyle = {
+    width: `${menuButtonWidth}px`,
+    height: `${menuButtonHeight}px`,
+    borderRadius: `${menuButtonHeight / 2}px`
+  };
+
+  const rightIconStyle = {
+    width: `${menuButtonWidth}px`,
+    height: `${menuButtonHeight}px`
   };
 
   return (
-    <View
-      className={`nav_home_bar ${className}`}
-      style={`height: ${navigationBarHeight}px;padding: 0 ${navigationPaddding}px`}
-    >
-      <View
-        className="navbar"
-        style={`height: ${navigationContentHeight}px;top:${statusBarHeight}px`}
-      >
-        <View
-          className="back_icon"
-          style={`width:${menuButtonWidth}px;height:${menuButtonHeight}px;border-radius:${
-            menuButtonHeight / 2
-          }px`}
-        >
+    <View className={`nav_home_bar ${className}`} style={navStyle}>
+      <View className="navbar" style={navbarStyle}>
+        <View className="back_icon" style={backIconStyle}>
           <View className="icon_item" onClick={onBackClick}>
             <IconFont icon="icon-fanhui" />
           </View>
@@ -78,12 +102,10 @@ const NavigationHeader = (props: IPros) => {
           </View>
         </View>
         {title && <Text className="nav_title">{title}</Text>}
-        <View
-          className="right_icon"
-          style={`width:${menuButtonWidth}px;height:${menuButtonHeight}px`}
-        ></View>
+        <View className="right_icon" style={rightIconStyle}></View>
       </View>
     </View>
   );
 };
+
 export default NavigationHeader;
