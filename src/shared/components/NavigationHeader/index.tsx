@@ -1,6 +1,6 @@
 import Taro from "@tarojs/taro";
 import { Text, View } from "@tarojs/components";
-import router from "@shared/router";
+import { navigateBack, reLaunch } from "@shared/router/index";
 import IconFont from "../IconFont";
 import "./index.scss";
 interface IPros {
@@ -48,11 +48,11 @@ const NavigationHeader = (props: IPros) => {
     customBacKfn
       ? customBacKfn()
       : Taro.getCurrentPages().length > 1
-      ? router.navigateBack()
-      : router.reLaunch("pages/newHome");
+      ? navigateBack()
+      : reLaunch("pages/newHome");
   };
   const onBackHome = () => {
-    router.reLaunch("pages/newHome");
+    reLaunch("pages/newHome");
   };
 
   return (
