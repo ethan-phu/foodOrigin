@@ -18,6 +18,10 @@ const (
 const (
 	// MpApiErr 小程序接口调用错误
 	MpApiErr = iota + 30000
+	// WechatLoginErr 微信登录错误
+	WechatLoginErr
+	// WechatCodeInvalidErr 微信code无效
+	WechatCodeInvalidErr
 )
 
 const (

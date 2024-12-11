@@ -12,6 +12,9 @@ type User struct {
 	Online      bool   `gorm:"column:online" json:"online"`             // 用于标记用户是否在线
 	EmailValid  bool   `gorm:"column:email_valid" json:"email_valid"`   // 用于校验邮箱是否为真实邮箱
 	MobileValid bool   `gorm:"column:mobile_valid" json:"mobile_valid"` // 用于校验手机号是否为真实手机号
+	OpenID      string `gorm:"column:open_id" json:"open_id"`           // 微信用户唯一标识
+	UnionID     string `gorm:"column:union_id" json:"union_id"`         // 微信开放平台唯一标识
+	Nickname    string `gorm:"column:nickname" json:"nickname"`         // 微信用户昵称
 }
 
 func (User) TableName() string {

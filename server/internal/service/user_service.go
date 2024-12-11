@@ -7,10 +7,14 @@ package service
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"knowFood/internal/model"
 	"knowFood/internal/repo"
 	"knowFood/utils/xerrors"
 	"knowFood/utils/xerrors/ecode"
+
+	"gorm.io/gorm"
 )
 
 var _ UserService = (*userService)(nil)
@@ -26,6 +30,7 @@ type UserService interface {
 	GetById(ctx context.Context, uid int64) (*model.User, error)
 	GetByMobile(ctx context.Context, ID string) (*model.User, error)
 	Register(ctx context.Context, userInfo *model.User) error
+	GetOrCreateWechatUser(ctx context.Context, userInfo *model.User) (*model.User, error)
 }
 
 // userService 实现UserService接口
@@ -61,4 +66,35 @@ func (us *userService) GetByMobile(ctx context.Context, mobile string) (*model.U
 // Register 注册用户
 func (us *userService) Register(ctx context.Context, userInfo *model.User) error {
 	return us.ur.CreateUser(ctx, userInfo)
+}
+
+// GetOrCreateWechatUser 获取或创建微信用户
+func (us *userService) GetOrCreateWechatUser(ctx context.Context, userInfo *model.User) (*model.User, error) {
+	if userInfo.OpenID == "" {
+		return nil, xerrors.WithCode(ecode.ValidateErr, "OpenID不能为空")
+	}
+
+	// 先尝试通过OpenID查找用户
+	user, err := us.ur.GetUserByOpenID(ctx, userInfo.OpenID)
+	if err == nil {
+		return user, nil
+	}
+
+	// 如果用户不存在，创建新用户
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		// 设置默认用户名（如果没有提供昵称）
+		if userInfo.Nickname == "" {
+			userInfo.Name = fmt.Sprintf("user_%s", userInfo.OpenID[:8])
+		} else {
+			userInfo.Name = userInfo.Nickname
+		}
+
+		err = us.Register(ctx, userInfo)
+		if err != nil {
+			return nil, xerrors.Wrap(err, ecode.UserRegisterErr, "创建微信用户失败")
+		}
+		return us.ur.GetUserByOpenID(ctx, userInfo.OpenID)
+	}
+
+	return nil, xerrors.Wrap(err, ecode.RecordQueryErr, "查询用户失败")
 }

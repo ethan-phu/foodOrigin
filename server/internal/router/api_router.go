@@ -29,6 +29,8 @@ func (ar *ApiRouter) Load(g *gin.Engine) {
 	g.POST("/login", ar.userHandler.Login())
 	// 注册
 	g.POST("/register", ar.userHandler.Register())
+	// 微信小程序登录
+	g.POST("/wechat/login", ar.userHandler.WechatLogin())
 	// user group
 	ug := g.Group("/v1/user", middleware.AuthToken())
 	{

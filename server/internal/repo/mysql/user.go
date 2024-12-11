@@ -43,3 +43,13 @@ func (ur *userRepo) GetUserByMobile(ctx context.Context, mobile string) (*model.
 func (ur *userRepo) CreateUser(ctx context.Context, userInfo *model.User) error {
 	return ur.ds.Master(ctx).Create(userInfo).Error
 }
+
+// GetUserByOpenID 通过OpenID获取用户信息
+func (ur *userRepo) GetUserByOpenID(ctx context.Context, openID string) (*model.User, error) {
+	user := &model.User{}
+	err := ur.ds.Master(ctx).
+		Where("open_id = ?", openID).
+		Where("enabled_status = 1").
+		First(user).Error
+	return user, err
+}

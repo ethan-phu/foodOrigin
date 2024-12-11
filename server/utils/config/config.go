@@ -22,6 +22,7 @@ type Config struct {
 	DBConfig     DBConfig    `mapstructure:"database"` // 数据库信息
 	RedisConfig  RedisConfig `mapstructure:"redis"`    // redis
 	LogConfig    LogConfig   `mapstructure:"log"`      // uber zap
+	Wechat       WechatConfig `mapstructure:"wechat"`  // 微信小程序配置
 }
 
 // DBConfig is used to configure mysql database
@@ -58,6 +59,12 @@ type LogConfig struct {
 	Compress   bool   `mapstructure:"compress"`
 	LocalTime  bool   `mapstructure:"local-xtime"`
 	Console    bool   `mapstructure:"console"`
+}
+
+// WechatConfig 微信小程序配置
+type WechatConfig struct {
+	AppID     string `mapstructure:"app-id"`     // 小程序AppID
+	AppSecret string `mapstructure:"app-secret"` // 小程序AppSecret
 }
 
 // Load is a loader to load config file.
