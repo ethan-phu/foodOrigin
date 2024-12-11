@@ -1,64 +1,96 @@
 项目布局文档：https://github.com/golang-standards/project-layout/blob/master/README_zh-CN.md
 
-### knowFood
+### KnowFood Server
 
-基于gin的api服务端脚手架。 gin在Go web开发中是相当受欢迎的，但是gin也是一个轻量级web框架，并不能像其他语言比如java的spring框架具有丰富的生态和标准，在实际开发中需要自己设计和添加一些额外的能力，来完善应用，比如：request_id透传，依赖注入，日志打印分割，session管理，全局错误处理，编译打包等等。
+基于gin的API服务端，采用清洁架构设计。本项目采用传统的MVC模式，适用于业务API服务端开发。项目布局参考[project-layout](https://github.com/golang-standards/project-layout)。
 
-本项目布局为传统的MVC模式，适用于大部分业务api服务端开发。参考了行业流行框架，争取做到每一个文件，每一个目录位置有对应的理论依据支撑。
+## 环境要求
 
-布局参考[project-layout](https://github.com/golang-standards/project-layout)，该项目非Go官方标准，但是已经是行业主流。
-
-### 数据库环境配置
-1. 拉取镜像
+### 数据库配置
+1. PostgreSQL数据库安装
 ```shell
 podman pull docker.io/library/postgres:latest
 ```
+
 2. 运行数据库容器
 ```shell
 podman run --name postgres -e POSTGRES_USER=ethan -e POSTGRES_PASSWORD=AiRead@2024. -p 5432:5432 -v /home/ethan/code/airead_server/data -d [image_id/name]
 ```
-3. 导入初始化数据和数据库
+
+3. 数据库初始化
 ```shell
-PGPASSWORD=AiRead@2024. psql -h 127.0.0.1 -p 5432 -U ethan # linux中的密码
-PGPASSWORD=Airead@2024. psql -h 127.0.0.1 -p 5432 -U ethan  # mac中的密码
+# Linux环境
+PGPASSWORD=AiRead@2024. psql -h 127.0.0.1 -p 5432 -U ethan
+# macOS环境
+PGPASSWORD=Airead@2024. psql -h 127.0.0.1 -p 5432 -U ethan
+# 导入初始数据
 PGPASSWORD=AiRead@2024. psql -h 127.0.0.1 -p 5432 -d ethan -U ethan -f init_pg.sql
 ```
-### 环境配置
-1. 安装go sdk, 建议使用go1.21版本以上，[Go官网下载地址](https://go.dev/dl/)
-2. 安装好go sdk以后，需要安装Google wire，依赖注入工具。用于生成依赖注入代码
-    ```shell
-    $ go install github.com/google/wire/cmd/wire@latest
-    ```
-3. 设置go的模块代理为国内镜像地址，避免拉取依赖失败
-    ```shell
-    $ go env -w GO111MODULE=on
-    $ go env -w GOPROXY=https://goproxy.cn,direct
-    ```
 
-### 环境代理
+### Go环境配置
+1. 安装Go SDK (推荐Go 1.21+)
+   - 从[Go官网](https://go.dev/dl/)下载并安装
+
+2. 安装依赖注入工具wire
+```shell
+go install github.com/google/wire/cmd/wire@latest
+```
+
+3. 配置Go模块代理
+```shell
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
+```
+
+### 代理设置（如需要）
+```shell
 export https_proxy=http://192.168.8.162:7890 http_proxy=http://192.168.8.162:7890 all_proxy=socks5://192.168.8.162:7890
+```
 
-### 运行项目
-1. 克隆项目后首先拉取依赖
-    ```shell
-    $ go mod tidy
-    ```
-2. 命令行运行
-    ```shell
-    # 直接运行
-    # eg. 在cmd目录下执行（也可以在其他目录执行，注意配置文件路径，默认寻找当前执行路径下conf目录中的config.yml文件）
-    > go run . -c ../conf/config.yml
-    > go run . -c ../conf/config_mac.yml
+## 项目运行
 
-    # 使用make
-    # 1、打包（Linux/MacOS 下），在项目目录下执行make命令，打好的包在target目录下
-    >$ make
-    # 2、删除已打的包
-    >$ make clean
-    ```
-   开发工具goland和vscode中运行请自行查找资料，非常简单，不要忘了指定配置文件目录不然找不到配置文件。
+1. 安装依赖
+```shell
+go mod tidy
+```
 
-### [详细使用文档-点这里](https://github.com/xmgtony/knowFood/blob/master/docs/quick_start.md)
+2. 运行项目
+```shell
+# 开发环境运行
+go run . -c ../conf/config.yml
+# macOS环境运行
+go run . -c ../conf/config_mac.yml
+
+# 使用make构建
+make        # 构建项目，输出在target目录
+make clean  # 清理构建文件
+```
+
+## 项目特性
+
+- 基于Gin框架的Web API服务
+- 清洁架构设计，遵循依赖注入原则
+- 使用Wire进行依赖注入
+- 集成Viper进行配置管理
+- 集成Gorm进行数据库操作
+- Redis集成
+- JWT认证支持
+- Session管理
+- 统一的API响应格式
+- 全局错误处理
+- 日志管理（Zap + Lumberjack）
+- 优雅停机支持
+- 使用Make进行项目构建
+- 版本管理支持
+
+## 项目结构
+
+遵循清洁架构原则，项目分为以下层次：
+- Handler层：处理HTTP请求
+- Service层：业务逻辑处理
+- Repository层：数据访问
+
+## 文档
 
 ### 理论基础
 
@@ -85,8 +117,3 @@ export https_proxy=http://192.168.8.162:7890 http_proxy=http://192.168.8.162:789
 - 添加makefile，可以使用make 命令进行编译，打包。
 - 完善了项目版本管理，使用make命令编译后的项目可以方便跟踪线上发布版本
 - 更多功能会根据个人实际开发中的经验添加，不过度封装，保持简单。
-
-### 特别感谢JetBrains对开源项目支持
-<a href="https://jb.gg/OpenSourceSupport">
-  <img src="https://user-images.githubusercontent.com/8643542/160519107-199319dc-e1cf-4079-94b7-01b6b8d23aa6.png" align="left" height="100" width="100"  alt="JetBrains">
-</a>
