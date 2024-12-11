@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Provider } from "mobx-react";
 import Taro from "@tarojs/taro";
 import store from "@shared/store";
+import "@nutui/nutui-react-taro/dist/style.css";
 import "./app.scss";
 
 const App = (props) => {

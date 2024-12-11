@@ -5,3 +5,7 @@ deploy_versions/
 node_modules/
 .DS_Store
 .swc
+
+# 配置文件
+src/shared/config/config.prod.ts
+src/shared/config/config.dev.ts

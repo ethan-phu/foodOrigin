@@ -49,6 +49,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.26.0",
+    "@nutui/icons-react-taro": "^2.0.1",
     "@nutui/nutui-react-taro": "^2.7.2",
     "@tarojs/cli": "3.6.23",
     "@tarojs/components": "3.6.23",
