@@ -18,11 +18,11 @@ export interface LoginResponse {
 }
 
 class Api {
-  async login(code: string): Promise<LoginResponse> {
+  async login(code: string, avatarUrl?: string, nickName?: string): Promise<LoginResponse> {
     const response = await Taro.request<LoginResponse>({
       url: `${BASE_URL}/wechat/login`,
       method: 'POST',
-      data: { code }
+      data: { code, avatarUrl, nickName }
     });
 
     if (response.statusCode !== 200) {

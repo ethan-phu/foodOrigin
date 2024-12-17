@@ -22,8 +22,8 @@ import (
 // WechatLoginReq 微信小程序登录请求参数
 type WechatLoginReq struct {
 	Code     string `json:"code" binding:"required"` // 小程序登录code
-	Nickname string `json:"nickname"`                // 用户昵称
-	Avatar   string `json:"avatar"`                  // 用户头像
+	Nickname string `json:"nickName"`                // 用户昵称
+	Avatar   string `json:"avatarUrl"`               // 用户头像
 }
 
 // WechatLoginResp 微信登录响应

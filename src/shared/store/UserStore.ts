@@ -81,10 +81,10 @@ class UserStore {
     }
   }
 
-  async login() {
+  async login(avatarUrl?: string, nickName?: string) {
     try {
       const { code } = await Taro.login();
-      const response = await api.login(code);
+      const response = await api.login(code, avatarUrl, nickName);
       
       if (response.err_code === 0) {
         const { token } = response.data;

@@ -13,7 +13,21 @@ const Mine = observer(() => {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      await userStore.login();
+      const { userInfo } = await Taro.getUserProfile({
+        desc: '用于完善会员资料',
+        lang: 'zh_CN'
+      });
+      try {
+        await userStore.login(userInfo.avatarUrl, userInfo.nickName);
+      } catch (error) {
+        console.error('Login failed:', error);
+        Toast.show('登录失败');
+        return;
+      }
+      userStore.updateUserInfo({
+        nickName: userInfo.nickName,
+        avatarUrl: userInfo.avatarUrl
+      });
       Toast.show('登录成功');
     } catch (error) {
       console.error('Login failed:', error);

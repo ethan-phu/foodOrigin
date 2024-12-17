@@ -25,33 +25,6 @@ const App = (props) => {
           }
         } catch (error) {
           console.log('Session expired or not exist, trying to login');
-          try {
-            const { code } = await Taro.login();
-            console.log('Login successful, code:', code);
-            
-            const res = await Taro.request({
-              url: `${ApiConfig.base_url}/wechat/login`,
-              method: "POST",
-              data: {
-                code,
-              },
-            });
-            
-            if (res.statusCode === 200 && res.data.err_code === 0) {
-              userStore.setToken(res.data.data.token);
-              // 登录成功后获取用户信息
-              try {
-                await userStore.fetchUserInfo();
-                console.log('User info fetched successfully');
-              } catch (error) {
-                console.error('Failed to fetch user info:', error);
-              }
-            } else {
-              console.error("Login failed:", res.data.message);
-            }
-          } catch (loginError) {
-            console.error('Login failed:', loginError);
-          }
         }
       };
 
