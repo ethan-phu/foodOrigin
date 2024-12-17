@@ -1,0 +1,57 @@
+.mine {
+  .user-info {
+    margin: 24px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .menu-list {
+    margin: 24px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .nut-cell {
+      padding: 16px 24px;
+      
+      &::after {
+        left: 24px;
+        right: 24px;
+      }
+    }
+  }
+
+  .nut-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .login-btn,
+  .get-userinfo-btn {
+    background: linear-gradient(to right, #4481eb, #04befe);
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 12px 32px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto;
+
+    &::after {
+      display: none;
+    }
+
+    &.button-hover {
+      opacity: 0.9;
+    }
+  }
+
+  .get-userinfo-btn {
+    background: linear-gradient(to right, #11998e, #38ef7d);
+  }
+}

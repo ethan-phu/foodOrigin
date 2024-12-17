@@ -41,6 +41,10 @@ const config = {
     options: {},
   },
   framework: "react",
+  alias: {
+    '@': path.resolve(__dirname, '..', 'src'),
+    '@shared': path.resolve(__dirname, '..', 'src/shared'),
+  },
   mini: {
     postcss: {
       pxtransform: {
@@ -69,6 +73,12 @@ const config = {
     },
     webpackChain(chain, webpack) {
       chain.merge({
+        resolve: {
+          alias: {
+            '@': path.resolve(__dirname, '..', 'src'),
+            '@shared': path.resolve(__dirname, '..', 'src/shared'),
+          }
+        },
         plugin: {
           install: {
             plugin: UnifiedWebpackPluginV5,
@@ -86,9 +96,7 @@ const config = {
     resource: [
       path.resolve(__dirname, "..", "src/shared/assets/style/base.scss"),
     ],
-  },
-  alias: {
-    "@shared": path.resolve(__dirname, "..", "src/shared"),
+    data: `@import "@nutui/nutui-react-taro/dist/styles/variables.scss";`,
   },
   h5: {
     esnextModules: ["taro-ui"],

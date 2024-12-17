@@ -1,4 +1,9 @@
 import { observer } from "mobx-react";
+import { userStore } from './UserStore';
 
-export * from "./GlobalStore";
-export default observer;
+const store = {
+  userStore,
+};
+
+export * from "./UserStore";
+export default store;

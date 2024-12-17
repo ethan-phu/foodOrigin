@@ -20,7 +20,8 @@
     "resolveJsonModule": true,
     "typeRoots": ["node_modules/@types", "global.d.ts"],
     "paths": {
-      "@shared/*": ["./src/shared/*"]
+      "@shared/*": ["./src/shared/*"],
+      "@/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules", "dist"],
