@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import PageContainer from "@shared/components/PageContainer";
 import { useState } from "react";
 import { userStore } from "@shared/store";
-import { Cell, Avatar, Toast } from "@nutui/nutui-react-taro";
+import { Cell, Avatar } from "@nutui/nutui-react-taro";
 import Taro from "@tarojs/taro";
 import "./index.scss";
 
@@ -21,17 +21,17 @@ const Mine = observer(() => {
         await userStore.login(userInfo.avatarUrl, userInfo.nickName);
       } catch (error) {
         console.error('Login failed:', error);
-        Toast.show('登录失败');
+        Taro.showToast({ title: '登录失败', icon: 'error' });
         return;
       }
       userStore.updateUserInfo({
         nickName: userInfo.nickName,
         avatarUrl: userInfo.avatarUrl
       });
-      Toast.show('登录成功');
+      Taro.showToast({ title: '登录成功', icon: 'success' });
     } catch (error) {
       console.error('Login failed:', error);
-      Toast.show('登录失败');
+      Taro.showToast({ title: '登录失败', icon: 'error' });
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,11 @@ const Mine = observer(() => {
 
   const handleLogout = () => {
     userStore.logout();
-    Toast.show('已退出登录');
+    Taro.showToast({
+      title: '退出登录成功',
+      icon: 'success',
+      duration: 2000
+    });
   };
 
   const navigateToAbout = () => {
@@ -84,9 +88,9 @@ const Mine = observer(() => {
       </View>
 
       <View className="menu-list">
-        <Cell title="浏览历史" isLink />
-        <Cell title="意见反馈" isLink />
-        <Cell title="关于我们" isLink onClick={navigateToAbout} />
+        <Cell title="浏览历史" />
+        <Cell title="意见反馈" />
+        <Cell title="关于我们" onClick={navigateToAbout} />
         {userStore.isLoggedIn && (
           <Cell
             title="退出登录"

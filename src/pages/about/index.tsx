@@ -24,10 +24,10 @@ const About = observer(() => {
 
       {/* 关于信息列表 */}
       <View className="about-list">
-        <Cell title="用户协议" isLink onClick={() => {}} />
-        <Cell title="隐私政策" isLink onClick={() => {}} />
-        <Cell title="更新历史" isLink onClick={() => {}} />
-        <Cell title="开源许可" isLink onClick={() => {}} />
+        <Cell title="用户协议" onClick={() => {}} />
+        <Cell title="隐私政策" onClick={() => {}} />
+        <Cell title="更新历史" onClick={() => {}} />
+        <Cell title="开源许可" onClick={() => {}} />
       </View>
 
       {/* 底部版权信息 */}

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import Taro from '@tarojs/taro';
-import { api, LoginResponse, WechatUserInfo } from '@/services/api';
+import { api, WechatUserInfo } from '@/services/api';
 import { ApiConfig } from '@/config';
 
 interface UserInfoResponse {
