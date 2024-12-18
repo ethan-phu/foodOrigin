@@ -67,7 +67,7 @@ const Mine = observer(() => {
                 {userStore.userInfo?.nickname || userStore.userInfo?.name || '未设置昵称'}
               </Text>
               <Text className="text-gray-500 text-sm block mt-1">
-                ID: {userStore.userInfo?.id}
+                ID: {userStore.userInfo?.union_id}
               </Text>
             </View>
           </View>
