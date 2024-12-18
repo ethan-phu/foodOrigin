@@ -106,7 +106,7 @@ export default function Index() {
             </View>
             <View>
               <Text className='font-medium'>扫码查询</Text>
-              <Text className='text-sm block'>扫码查询成分</Text>
+              <Text className='text-sm block'>扫码查询来源</Text>
             </View>
           </View>
         </View>

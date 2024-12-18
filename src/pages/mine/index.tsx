@@ -66,7 +66,24 @@ const Mine = observer(() => {
               <Text className="text-lg font-bold">
                 {userStore.userInfo?.nickname || userStore.userInfo?.name || '未设置昵称'}
               </Text>
-              <Text className="text-gray-500 text-sm block mt-1">
+              <Text 
+                className="text-gray-500 text-sm block mt-1 cursor-pointer hover:opacity-75" 
+                onClick={() => {
+                  const unionId = userStore.userInfo?.union_id;
+                  if (unionId) {
+                    Taro.setClipboardData({
+                      data: unionId,
+                      success: () => {
+                        Taro.showToast({
+                          title: 'ID已复制',
+                          icon: 'success',
+                          duration: 2000
+                        });
+                      }
+                    });
+                  }
+                }}
+              >
                 ID: {userStore.userInfo?.union_id}
               </Text>
             </View>

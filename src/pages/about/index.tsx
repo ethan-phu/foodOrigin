@@ -1,42 +1,44 @@
-import { View, Text, Image } from "@tarojs/components";
-import { observer } from "mobx-react";
-import PageContainer from "@shared/components/PageContainer";
-import { Cell } from "@nutui/nutui-react-taro";
-import "./index.scss";
+import { View, Text, Image } from '@tarojs/components';
+import { FC } from 'react';
+import PageContainer from '@shared/components/PageContainer';
+import { Cell } from '@nutui/nutui-react-taro';
+import Taro from '@tarojs/taro';
+import './index.scss';
 
-const About = observer(() => {
+const About: FC = () => {
+  const navigateToPrivacy = () => {
+    Taro.navigateTo({
+      url: '/pages/privacy/index'
+    });
+  };
+
   return (
-    <PageContainer className="about bg-gray-100 min-h-screen">
-      {/* Logo 和应用信息 */}
-      <View className="app-info bg-white p-6 mb-4 text-center">
-        <Image 
-          className="app-logo mx-auto mb-4"
-          src="/assets/images/logo.png"
+    <PageContainer title="关于我们" showBack>
+      {/* Logo和应用名称 */}
+      <View className="flex flex-col items-center pt-0 pb-6">
+        <Image
+          className="w-20 h-20 mb-3 rounded-2xl shadow-sm"
+          src="https://example.com/logo.png"
           mode="aspectFit"
         />
-        <Text className="app-name block text-xl font-bold mb-2">
-          食知源
-        </Text>
-        <Text className="app-version text-gray-500">
-          版本 1.0.0
-        </Text>
+        <Text className="text-lg font-medium">食知源</Text>
+        <Text className="text-xs text-gray-500 mt-1">版本 1.0.0</Text>
       </View>
 
       {/* 关于信息列表 */}
-      <View className="about-list">
-        <Cell title="用户协议" onClick={() => {}} />
-        <Cell title="隐私政策" onClick={() => {}} />
-        <Cell title="更新历史" onClick={() => {}} />
-        <Cell title="开源许可" onClick={() => {}} />
+      <View className="about-list mt-2">
+        <Cell title="用户协议" onClick={() => {}} className="py-2.5" />
+        <Cell title="隐私政策" onClick={navigateToPrivacy} className="py-2.5" />
+        <Cell title="更新历史" onClick={() => {}} className="py-2.5" />
+        <Cell title="开源许可" onClick={() => {}} className="py-2.5" />
       </View>
 
       {/* 底部版权信息 */}
-      <View className="copyright text-center text-gray-500 py-8">
-        <Text className="block">© 2024 食知源</Text>
-        <Text className="block mt-1">All Rights Reserved</Text>
+      <View className="text-center text-gray-400 text-xs mt-6 mb-4">
+        2024 食知源. All rights reserved.
       </View>
     </PageContainer>
   );
-});
+};
 
 export default About;
