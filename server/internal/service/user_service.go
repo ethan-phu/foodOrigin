@@ -88,6 +88,10 @@ func (us *userService) GetOrCreateWechatUser(ctx context.Context, userInfo *mode
 		} else {
 			userInfo.Name = userInfo.Nickname
 		}
+		// 设置默认的 unionID
+		if userInfo.UnionID == "" {
+			userInfo.UnionID = userInfo.OpenID
+		}
 
 		err = us.Register(ctx, userInfo)
 		if err != nil {

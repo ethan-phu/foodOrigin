@@ -83,3 +83,32 @@ func (uh *Handler) Register() gin.HandlerFunc {
 		response.JSON(c, nil, nil)
 	}
 }
+
+// RefreshToken 刷新用户的 token
+func (uh *Handler) RefreshToken() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// 从当前请求中获取用户 ID
+		userId := c.GetInt64("user_id")
+		if userId == 0 {
+			response.JSON(c, xerrors.WithCode(ecode.TokenInvalidErr, "invalid token"), nil)
+			return
+		}
+
+		// 生成新的 token
+		expireAt := time.Now().Add(24 * 7 * time.Hour)
+		claims := jwt.BuildClaims(expireAt, userId)
+		token, err := jwt.GenToken(claims, config.GlobalConfig.JwtSecret)
+		if err != nil {
+			response.JSON(c, xerrors.Wrap(err, ecode.TokenGenerateErr, "生成用户授权token失败"), nil)
+			return
+		}
+
+		response.JSON(c, nil, struct {
+			Token    string     `json:"token"`
+			ExpireAt jtime.Time `json:"expire_at"`
+		}{
+			Token:    token,
+			ExpireAt: jtime.Time(expireAt),
+		})
+	}
+}

@@ -54,6 +54,10 @@ const (
 	SubscriptionErr
 	SubscriptionParseErr
 	FeedExistErr
+	// TokenInvalidErr token无效或已过期
+	TokenInvalidErr
+	// TokenGenerateErr 生成token失败
+	TokenGenerateErr
 )
 
 const (

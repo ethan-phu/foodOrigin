@@ -49,6 +49,22 @@ class Api {
 
     return response.data;
   }
+
+  async refreshToken(): Promise<LoginResponse> {
+    const response = await Taro.request<LoginResponse>({
+      url: `${BASE_URL}/v1/user/refresh-token`,
+      method: 'POST',
+      header: {
+        'Authorization': `Bearer ${Taro.getStorageSync('token')}`
+      }
+    });
+
+    if (response.statusCode !== 200) {
+      throw new Error(response.data?.toString() || '刷新token失败');
+    }
+
+    return response.data;
+  }
 }
 
 export const api = new Api();

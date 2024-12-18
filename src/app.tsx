@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Provider } from "mobx-react";
 import Taro from "@tarojs/taro";
 import store, { userStore } from "@shared/store";
-import { ApiConfig } from "@/config";
 import "@nutui/nutui-react-taro/dist/style.css";
 import "./app.scss";
 
@@ -14,17 +13,24 @@ const App = (props) => {
         try {
           await Taro.checkSession();
           console.log('Session is valid');
-          // 如果会话有效，尝试获取用户信息
+          // 如果会话有效且有 token，尝试刷新 token
           if (userStore.token) {
             try {
+              await userStore.refreshToken();
+              console.log('Token refreshed successfully');
+              // 获取用户信息
               await userStore.fetchUserInfo();
               console.log('User info fetched successfully');
             } catch (error) {
-              console.error('Failed to fetch user info:', error);
+              console.error('Failed to refresh token or fetch user info:', error);
+              // token 刷新失败，可能是过期了，清除登录状态
+              userStore.logout();
             }
           }
         } catch (error) {
-          console.log('Session expired or not exist, trying to login');
+          console.log('Session expired or not exist');
+          // 会话过期，清除登录状态
+          userStore.logout();
         }
       };
 
@@ -37,29 +43,27 @@ const App = (props) => {
           // 请求完新版本信息的回调
           res.hasUpdate && console.warn("新版本提示");
         });
+
         updateManager.onUpdateReady(() => {
           Taro.showModal({
             title: "更新提示",
             content: "新版本已经准备好，是否重启应用？",
-            success(res) {
+            success: (res) => {
               if (res.confirm) {
-                updateManager.applyUpdate(); // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+                // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+                updateManager.applyUpdate();
               }
             },
           });
         });
+
         updateManager.onUpdateFailed(() => {
-          // 新的版本下载失败
+          // 新版本下载失败
           Taro.showModal({
-            title: "已经有新版本了哟~",
-            content: "新版本已经上线啦~，请您删除当前小程序，重新搜索打开哟~",
+            title: "更新提示",
+            content: "新版本下载失败，请检查网络后重试",
+            showCancel: false,
           });
-        });
-      } else {
-        Taro.showModal({
-          title: "提示",
-          content:
-            "当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。",
         });
       }
     }

@@ -35,5 +35,6 @@ func (ar *ApiRouter) Load(g *gin.Engine) {
 	ug := g.Group("/v1/user", middleware.AuthToken())
 	{
 		ug.GET("", ar.userHandler.GetUserInfo())
+		ug.POST("/refresh-token", ar.userHandler.RefreshToken())
 	}
 }

@@ -128,6 +128,26 @@ class UserStore {
     }
   }
 
+  async refreshToken() {
+    if (!this.token) {
+      throw new Error('Not logged in');
+    }
+
+    try {
+      const response = await api.refreshToken();
+      if (response.err_code === 0) {
+        const { token } = response.data;
+        this.setToken(token);
+        return token;
+      } else {
+        throw new Error(response.message || '刷新token失败');
+      }
+    } catch (error) {
+      console.error('Refresh token failed:', error);
+      throw error;
+    }
+  }
+
   logout() {
     this.token = '';
     this.userInfo = null;
